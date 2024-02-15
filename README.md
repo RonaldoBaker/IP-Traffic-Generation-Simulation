@@ -13,4 +13,4 @@ The GAN was optimised using Optuna, a hyperparameter optimisation framework. The
 To have more control of the simulation, it was built from scratch by following the flow of control for the next-event time-advance approach outlined in "Simulation Modeling and Analysis" by Averill M. Law.
 
 The network topology emulated in the simulation comes from UKNet 
-![UKNet, a telephone network located in the UK, internet network follows the same topology]()
+![UKNet, a telephone network located in the UK, internet network follows the same topology](https://github.com/RonaldoBaker/IP-Traffic-Simulation/blob/main/UKNet.png)
