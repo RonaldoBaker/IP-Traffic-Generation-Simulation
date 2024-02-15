@@ -14,3 +14,11 @@ To have more control of the simulation, it was built from scratch by following t
 
 The network topology emulated in the simulation comes from UKNet 
 ![UKNet, a telephone network located in the UK, internet network follows the same topology](https://github.com/RonaldoBaker/IP-Traffic-Simulation/blob/main/UKNet.png)
+
+## Getting started
+* Create virtual environment with `python <= 3.10`
+* Activate virtual environment
+* Install dependencies from requirements document
+* Add the virtual environment to the Jupyter kernel (if continuing to use Jupyter Notebooks)
+* If converting to a python script, work with compiler in the virtual environment in code editor
+* Make sure all `.pt` files are within the same directory as the file being executed
