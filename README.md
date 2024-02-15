@@ -1,12 +1,16 @@
-# IP-Traffic-Generation
+# IP Traffic Simulation
 
-With the need to accommodate more Internet users each year, we must be able to plan and optimise Internet networks appropriately. To do this, we must be able to simulate Internet Protocol (IP) traffic in different scenarios to evaluate the capacity requirements of growing demands. 
+This repository details an IP Traffic Simulation created for the 3rd-year Electronic & Electrical Engineering project at University College London in 2024. This project is split into two parts: generation of synthetic IP traffic on the flow level, and the simulation of that synthetic IP traffic. 
 
-As part of a 3rd-year Electronic & Electrical Engineering project at University College London, it was found that Generative Adversarial Networks (GANs) are becoming a common method of generating synthetic internet traffic.
+## Traffic Generation
+### Generation of synthetic IP traffic
+A Generative Adversarial Network (GAN), a type of neural network, was used to generate synthetic IP traffic on the flow level. PyTorch was used for creating the GAN. The training data inputted into one of the neural networks comes from a public dataset on Kaggle: [https://www.kaggle.com/datasets/jsrojas/ip-network-traffic-flows-labeled-with-87-apps/data]. 
 
-## Generation of synthetic IP traffic
-The GAN model in a Jupyter Notebook can be reviewed in the repository. The training data used comes from a public dataset on Kaggle: [https://www.kaggle.com/datasets/jsrojas/ip-network-traffic-flows-labeled-with-87-apps/data]. 
+### Model Optimisation
+The GAN was optimised using Optuna, a hyperparameter optimisation framework. The GAN contain two neural networks, hence it is classed as a multi-objective optimisation. At the time of development, Optuna lacks sufficient support for multi-objective optimisation. Custom pruner functions were written to deal with the lack of multi-objective optimisation support in Optuna. 
 
-## GAN Optimisation
-The GAN was optimised using Optuna, a hyperparameter optimisation framework. Custom pruner functions were written to deal with the lack of multi-objective support.
+## Traffic Simulation
+To have more control of the simulation, it was built from scratch by following the flow of control for the next-event time-advance approach outlined in "Simulation Modeling and Analysis" by Averill M. Law.
 
+The network topology emulated in the simulation comes from UKNet 
+![UKNet, a telephone network located in the UK, internet network follows the same topology]()
