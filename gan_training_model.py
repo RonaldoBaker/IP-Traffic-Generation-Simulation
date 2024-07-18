@@ -6,8 +6,8 @@ from torch.utils.data import DataLoader
 import matplotlib.pyplot as plt
 import pandas as pd
 import time
-import datetime
 from tqdm.notebook import tqdm
+from neural_networks import Generator, Discriminator
 
 # Constants
 BATCH_SIZE = 1300
@@ -15,7 +15,7 @@ NUM_EPOCHS = 5
 LEARNING_RATE = 0.02
 RANDOM_SEED = 77
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-TRAINING_DATA = "training_data.pt"
+TRAINING_DATA = "training_data_tensor.pt"
 PATH = "trained_generator.pt"
 BINS = 50
 
