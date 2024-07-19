@@ -15,56 +15,56 @@ NUM_EPOCHS = 5
 LEARNING_RATE = 0.02
 RANDOM_SEED = 77
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-TRAINING_DATA = "training_data_tensor.pt"
-PATH = "trained_generator.pt"
+TRAINING_DATA = "../training-data/training_data_tensor.pt"
+PATH = "../trained-generator/generator.pt"
 BINS = 50
 
 
 # Generator Class
-class Generator(nn.Module):
-    def __init__(self):
-        super().__init__()
-        self.model = nn.Sequential(
-            nn.Linear(2, 16),
-            nn.ReLU(),
-            nn.Linear(16, 32),
-            nn.ReLU(),
-            nn.Linear(32, 2),
-        )
-
-    def forward(self, x):
-        output = self.model(x)
-        return output
+# class Generator(nn.Module):
+#     def __init__(self):
+#         super().__init__()
+#         self.model = nn.Sequential(
+#             nn.Linear(2, 32),
+#             nn.ReLU(),
+#             nn.Linear(32, 16),
+#             nn.ReLU(),
+#             nn.Linear(16, 2),
+#         )
+#
+#     def forward(self, x):
+#         output = self.model(x)
+#         return output
 
 
 # Discriminator Class
-class Discriminator(nn.Module):
-    def __init__(self):
-        super().__init__()
-        self.model = nn.Sequential(
-            # Input is 2D, first hidden layer is composed of 256 neurons with ReLU activation
-            nn.Linear(2, 128),
-            nn.ReLU(),
-
-            # Have to use dropout to avoid overfitting
-            nn.Dropout(0.3),
-
-            # second and third layers are composed to 128 and 64 neurons, respectively
-            nn.Linear(128, 64),
-            nn.ReLU(),
-            nn.Dropout(0.3),
-            nn.Linear(64, 32),
-            nn.ReLU(),
-            nn.Dropout(0.3),
-
-            # output is composed of a single neuron with sigmoidal activation to represent a probability
-            nn.Linear(32, 1),
-            nn.Sigmoid()
-        )
-
-    def forward(self, x):
-        output = self.model(x)
-        return output
+# class Discriminator(nn.Module):
+#     def __init__(self):
+#         super().__init__()
+#         self.model = nn.Sequential(
+#             # Input is 2D, first hidden layer is composed of 2 neurons with ReLU activation
+#             nn.Linear(2, 32),
+#             nn.ReLU(),
+#
+#             # Have to use dropout to avoid overfitting
+#             nn.Dropout(0.3),
+#
+#             # Second, third and fourth layers are composed to 32, 16 and 8 neurons, respectively
+#             nn.Linear(32, 16),
+#             nn.ReLU(),
+#             nn.Dropout(0.3),
+#             nn.Linear(16, 8),
+#             nn.ReLU(),
+#             nn.Dropout(0.3),
+#
+#             # Output is composed of a single neuron with sigmoidal activation to represent a probability
+#             nn.Linear(8, 1),
+#             nn.Sigmoid()
+#         )
+#
+#     def forward(self, x):
+#         output = self.model(x)
+#         return output
 
 
 # Preparing data
