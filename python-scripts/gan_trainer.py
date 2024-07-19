@@ -25,21 +25,25 @@ class GANTrainer:
         self.training_data = torch.load(self.data_path)
         self.training_data = self.training_data.to(torch.float32).to(self.device)
         self.training_data_length = len(self.training_data)
+        print("Finished loading data!")
 
     def __create_data_loader__(self):
         train_labels = torch.zeros(size=(self.training_data_length, 1))
         train_labels = train_labels.to(self.device)
-        train_set = [(self.training_data[i], train_labels[i] for i in range(self.training_data_length))]
+        train_set = [(self.training_data[i], train_labels[i]) for i in range(self.training_data_length)]
         self.train_loader = DataLoader(train_set, batch_size=self.batch_size, shuffle=True, drop_last=True)
+        print("Finished creating data loader!")
 
     def __create_neural_networks__(self):
         self.generator = Generator().to(self.device)
         self.discriminator = Discriminator().to(self.device)
+        print("Finished creating neural networks!")
 
     def __create_lf_opt(self):
         self.loss_func = nn.BCELoss()
         self.discriminator_optimiser = optim.Adam(self.discriminator.parameters(), lr=self.learning_rate)
         self.generator_optimiser = optim.Adam(self.generator.parameters(), lr=self.learning_rate)
+        print("Finished creating loss function and optimisers!")
 
     def initialise(self):
         self.__load_data__()
@@ -89,8 +93,18 @@ class GANTrainer:
                     print(f"Epoch: {epoch} | D Loss: {discriminator_loss} | G Loss: {generator_loss}")
 
         self.end_time = time.time()
+        print("Training complete!")
 
     def report(self):
         run_time = round(self.end_time - self.start_time, 2)
         converted_time = time.strftime("%H hours %M minutes %S seconds", time.gmtime(run_time))
-        print(converted_time)
+        print(f"Report:\nRun time: {converted_time}")
+        print(f"Epochs: {self.epochs} epochs\nLearning rate: {self.learning_rate}\nBatch size: {self.batch_size} samples/batch")
+
+
+    def save_model(self):
+        print("Building functionality...please come back later")
+
+    @staticmethod
+    def load_model(self):
+        print("Building functionality...please come back later")
