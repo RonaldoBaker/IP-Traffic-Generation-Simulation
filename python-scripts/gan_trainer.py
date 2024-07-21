@@ -5,10 +5,11 @@ import torch.optim as optim
 from torch.utils.data import DataLoader
 from neural_networks import Generator, Discriminator
 from tqdm.notebook import tqdm
+import matplotlib.pyplot as plt
 
 
 class GANTrainer:
-    def __init__(self, epochs, learning_rate, batch_size, data_path, device, seed):
+    def __init__(self, epochs=0, learning_rate=0, batch_size=0, data_path="", device=None, seed=0):
         self.epochs = epochs
         self.learning_rate = learning_rate
         self.batch_size = batch_size
@@ -18,8 +19,9 @@ class GANTrainer:
         self.epoch_count = []
         self.generator_loss_values = []
         self.discriminator_loss_values = []
-        self.start_time = None
-        self.end_time = None
+        self.start_time = 0
+        self.end_time = 0
+        self.generator = None
 
     def __load_data__(self):
         self.training_data = torch.load(self.data_path)
@@ -95,12 +97,21 @@ class GANTrainer:
         self.end_time = time.time()
         print("Training complete!")
 
+    def __visualise__(self):
+        plt.plot(self.epoch_count, self.generator_loss_values, label="Generator Loss")
+        plt.plot(self.epoch_count, self.discriminator_loss_values, label="Discriminator Loss")
+        plt.title("Generator and Discriminator Loss Curves")
+        plt.ylabel("Loss")
+        plt.xlabel("Epochs")
+        plt.legend()
+        plt.show()
+
     def report(self):
         run_time = round(self.end_time - self.start_time, 2)
         converted_time = time.strftime("%H hours %M minutes %S seconds", time.gmtime(run_time))
         print(f"Report:\nRun time: {converted_time}")
         print(f"Epochs: {self.epochs} epochs\nLearning rate: {self.learning_rate}\nBatch size: {self.batch_size} samples/batch")
-
+        self.__visualise__()
 
     def save_model(self):
         print("Building functionality...please come back later")
