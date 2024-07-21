@@ -4,10 +4,10 @@ from gan_trainer import GANTrainer
 
 # Constants
 
-NUM_EPOCHS = 5
+NUM_EPOCHS = 1
 LEARNING_RATE = 0.02
 BATCH_SIZE = 1300
-TRAINING_DATA = "../training-data/training_data_tensor.pt"
+TRAINING_DATA_PATH = "../training-data/training_data_tensor.pt"
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 RANDOM_SEED = 77
 # PATH = "../trained-generator/generator.pt"
@@ -15,10 +15,10 @@ RANDOM_SEED = 77
 
 
 def main():
-    trainer = GANTrainer(NUM_EPOCHS, LEARNING_RATE, BATCH_SIZE, TRAINING_DATA, DEVICE, RANDOM_SEED)
+    trainer = GANTrainer(NUM_EPOCHS, LEARNING_RATE, BATCH_SIZE, TRAINING_DATA_PATH, DEVICE, RANDOM_SEED)
     trainer.initialise()
     trainer.train()
-    trainer.report()
+    # trainer.report()
 
 
 if __name__ == "__main__":

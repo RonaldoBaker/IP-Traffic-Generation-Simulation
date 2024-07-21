@@ -2,6 +2,8 @@ import torch.nn as nn
 
 
 class Generator(nn.Module):
+    trained = False
+
     def __init__(self):
         super().__init__()
         self.model = nn.Sequential(

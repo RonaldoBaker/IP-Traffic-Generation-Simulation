@@ -95,6 +95,7 @@ class GANTrainer:
                     print(f"Epoch: {epoch} | D Loss: {discriminator_loss} | G Loss: {generator_loss}")
 
         self.end_time = time.time()
+        self.generator.trained = True
         print("Training complete!")
 
     def __visualise__(self):
@@ -113,9 +114,24 @@ class GANTrainer:
         print(f"Epochs: {self.epochs} epochs\nLearning rate: {self.learning_rate}\nBatch size: {self.batch_size} samples/batch")
         self.__visualise__()
 
-    def save_model(self):
-        print("Building functionality...please come back later")
+    def __load_default_generator__(self):
+        self.generator = Generator()
+
+    def save_model(self, path):
+        if self.generator is None:
+            raise ValueError("An error has occurred: Generator has not been initialised. Unable to save Generator model")
+        elif (self.generator is not None) & (self.generator.trained is False):
+            raise ValueError("An error has occurred: Generator has not been trained. Unable to save Generator model")
+        else:
+            try:
+                torch.save(self.generator.state_dict(), path)
+            except RuntimeError as E:
+                raise RuntimeError(f"An error has occurred: {E}")
 
     @staticmethod
-    def load_model(self):
-        print("Building functionality...please come back later")
+    def load_model(self, path):
+        if self.generator is not None:
+            # A Trained Generator already exists within the class
+            pass
+            # TODO: Finish this
+
