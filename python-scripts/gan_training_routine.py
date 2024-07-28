@@ -4,7 +4,7 @@ from gan_trainer import GANTrainer
 
 # Constants
 
-NUM_EPOCHS = 1
+NUM_EPOCHS = 5
 LEARNING_RATE = 0.02
 BATCH_SIZE = 1300
 TRAINING_DATA_PATH = "../training-data/training_data_tensor.pt"

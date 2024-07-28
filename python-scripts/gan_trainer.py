@@ -24,8 +24,7 @@ class GANTrainer:
         self.generator = None
 
     def __load_data__(self):
-        self.training_data = torch.load(self.data_path)
-        self.training_data = self.training_data.to(torch.float32).to(self.device)
+        self.training_data = torch.load(self.data_path).to(torch.float32).to(self.device)
         self.training_data_length = len(self.training_data)
         print("Finished loading data!")
 
@@ -41,7 +40,7 @@ class GANTrainer:
         self.discriminator = Discriminator().to(self.device)
         print("Finished creating neural networks!")
 
-    def __create_lf_opt(self):
+    def __create_lf_opt__(self):
         self.loss_func = nn.BCELoss()
         self.discriminator_optimiser = optim.Adam(self.discriminator.parameters(), lr=self.learning_rate)
         self.generator_optimiser = optim.Adam(self.generator.parameters(), lr=self.learning_rate)
@@ -51,7 +50,7 @@ class GANTrainer:
         self.__load_data__()
         self.__create_data_loader__()
         self.__create_neural_networks__()
-        self.__create_lf_opt()
+        self.__create_lf_opt__()
 
     def train(self):
         self.start_time = time.time()
