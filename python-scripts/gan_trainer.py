@@ -129,9 +129,15 @@ class GANTrainer:
                 raise RuntimeError(f"An error has occurred: {E}")
 
     @staticmethod
-    def load_model(self, path):
-        if self.generator is not None:
-            # A Trained Generator already exists within the class
-            pass
-            # TODO: Finish this
-
+    def load_model(self, path, device):
+        if self.generator is not None and self.generator.trained is True:
+            print("A trained generator already exists in the trainer.\nWould you like to use this existing generator or continue loading external generator?")
+            answer = lambda: input("1. Existing generator\n2. External generator\n(Enter 1 or 2")
+            while (response := answer()) not in {"1", "2"}:
+                print("Invalid input. Please enter 1 or 2.")
+            if answer is "1":
+                return self.generator
+            else:
+                new_generator = Generator()
+                new_generator.load_state_dict(torch.load(path, map_location=device))
+                return new_generator.to(device)

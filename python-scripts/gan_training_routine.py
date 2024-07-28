@@ -18,13 +18,11 @@ def main():
     trainer = GANTrainer(NUM_EPOCHS, LEARNING_RATE, BATCH_SIZE, TRAINING_DATA_PATH, DEVICE, RANDOM_SEED)
     trainer.initialise()
     trainer.train()
-    # trainer.report()
+    trainer.report()
 
 
 if __name__ == "__main__":
     main()
-
-# TODO: Add visualisation method to the GANTrainer class, add save and load model method as well
 
 # Visualising Generator and Discriminator loss
 
