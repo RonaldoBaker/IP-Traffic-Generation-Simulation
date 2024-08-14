@@ -1,14 +1,13 @@
 import time
-from datetime import datetime
 import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader
 from tqdm.notebook import tqdm
+from datetime import datetime
 import pandas as pd
 import numpy as np
 import optuna
-from optuna import Trial
 import functools
 from neural_networks import Generator, Discriminator
 
@@ -163,7 +162,7 @@ class GANOptimiser:
             if epoch == warmup_epochs:
                 # The trial is halfway through completion, now checking whether to prune or not
                 self.__prune(study=study, min_trials=self.min_trials, min_epochs=warmup_epochs, current_epoch=epoch,
-                      current_g_loss=generator_loss, current_d_loss=discriminator_loss)
+                             current_g_loss=generator_loss, current_d_loss=discriminator_loss)
 
         end_time = time.time()
         run_time = round(end_time - start_time, 2)
@@ -181,10 +180,56 @@ class GANOptimiser:
             self.study.optimize(self.wrapped_objective, n_trials=self.max_trials)
         else:
             # A previous trial has been halted and the optimisation routine isn't finished
-            complete_trials = sum(1 for trial in self.study.trials if trial.state in {optuna.trial.TrialState.PRUNED, optuna.trial.TrialState.COMPLETE})
+            complete_trials = sum(1 for trial in self.study.trials if
+                                  trial.state in {optuna.trial.TrialState.PRUNED, optuna.trial.TrialState.COMPLETE})
             print("Continuing previous optimisation loop...")
             self.study.optimize(self.wrapped_objective, n_trials=self.max_trials - complete_trials)
 
         print(f"Optimisation complete!")
-        # TODO: work out if I am going to find a way to store the times taken for halted optimisation loops
-        # TODO: implement report method to include save_trials, display_all_trials, and display_best_trial
+
+    def save_trials(self):
+        df = self.study.trials_dataframe()
+        now = str(datetime.now())
+        date, current_time = now.split(" ")
+        current_time = current_time.replace(":", ".")
+        df.to_csv(f"gan_optimisation_{date}_{time}.csv", index=False)
+        print(F"Trials saved to gan_optimisation_{date}_{time}.csv\n")
+
+    def __display_all_trials(self):
+        df = self.study.trials_dataframe()
+        df = pd.DataFrame(df, columns=['number', 'values_0', 'values_1', 'params_batch_size', 'params_epochs',
+                                       'params_learning_rate', 'state'])
+        df = df.rename(
+            columns={"number": "Trial #", "values_0": "G Loss", "values_1": "D Loss", "params_batch_size": "Batch Size",
+                     "params_epochs": "Epochs", "params_learning_rate": "Learning Rate", "state": "State"})
+        df["Trial #"] += 1  # Adjust the trial numbers
+
+        total = len(df)
+        complete = 0
+        pruned = 0
+        for trial in self.study.trials:
+            if trial.state == optuna.trial.TrialState.COMPLETE:
+                complete += 1
+            elif trial.state == optuna.trial.TrialState.PRUNED:
+                pruned += 1
+
+        print(f"{total} TOTAL TRIALS \n{complete} COMPLETED TRIALS \n{pruned} PRUNED TRIALS\n")
+        print(df)
+        print("\n")
+
+    def __display_best_trial(self):
+        best_trial = self.study.best_trials
+        best_trial_number = best_trial[0].number
+        best_trial_params = best_trial[0].params
+        best_trial_values = best_trial[0].values
+        print("~Best trial~")
+        print(f"Trial #: {best_trial_number + 1}")
+        print(f"G Loss: {best_trial_values[0]}\nD Loss: {best_trial_values[1]}")
+        print(
+            f"Batch Size: {best_trial_params['batch_size']}\nEpochs: {best_trial_params['epochs']}\nLearning Rate: {best_trial_params['learning_rate']}")
+
+    def report(self):
+        self.__display_all_trials()
+        self.__display_best_trial()
+
+    # TODO: work out if I am going to find a way to store the times taken for halted optimisation loops
