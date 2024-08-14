@@ -8,6 +8,7 @@ from tqdm.notebook import tqdm
 import pandas as pd
 import numpy as np
 import optuna
+from optuna import Trial
 import functools
 from neural_networks import Generator, Discriminator
 
@@ -19,8 +20,9 @@ RANDOM_SEED = 77
 
 
 class GANOptimiser:
-    def __init__(self, data_path, min_trials, max_trials, device, seed):
+    def __init__(self, data_path, storage_path, min_trials, max_trials, device, seed):
         self.data_path = data_path
+        self.storage_path = storage_path
         self.min_trials = min_trials
         self.max_trials = max_trials
         self.seed = seed
@@ -48,11 +50,11 @@ class GANOptimiser:
         self.study = optuna.create_study(directions=["minimize", "maximize"],
                                          study_name="GAN-Optimiser",
                                          sampler=optuna.samplers.NSGAIISampler(),
-                                         storage="sqlite:///demonstration_optimisation.db",
+                                         storage=self.storage_path,
                                          load_if_exists=True)
-        self.wrapped_objective = functools.partial(self.__objective__, self.study)
+        self.wrapped_objective = functools.partial(self.__objective, self.study)
 
-    def __objective(self, trial, additional_arg):
+    def __objective(self, additional_arg, trial):
         params = {
             "learning_rate": trial.suggest_float("learning_rate", low=1e-5, high=1e-1, log=True),
             "batch_size": trial.suggest_int("batch_size", low=500, high=2000, step=100),
@@ -171,14 +173,17 @@ class GANOptimiser:
 
     def optimise(self):
         # Accessing the last trial in the study to check whether the previous optimisation loop was halted or not
-        interrupted = self.study.trials[-1].state in {optuna.trial.TrialState.FAIL, optuna.trial.TrialState.WAITING}
-        if interrupted:
+        try:
+            interrupted = self.study.trials[-1].state in {optuna.trial.TrialState.FAIL, optuna.trial.TrialState.WAITING}
+        except IndexError:
+            # There is no last trial because it is being stored in a new path
+            print("Starting new optimisation loop")
+            self.study.optimize(self.wrapped_objective, n_trials=self.max_trials)
+        else:
+            # A previous trial has been halted and the optimisation routine isn't finished
             complete_trials = sum(1 for trial in self.study.trials if trial.state in {optuna.trial.TrialState.PRUNED, optuna.trial.TrialState.COMPLETE})
             print("Continuing previous optimisation loop...")
             self.study.optimize(self.wrapped_objective, n_trials=self.max_trials - complete_trials)
-        else:
-            print("Starting new optimisation loop")
-            self.study.optimize(self.wrapped_objective, n_trials=self.max_trials)
 
         print(f"Optimisation complete!")
         # TODO: work out if I am going to find a way to store the times taken for halted optimisation loops
