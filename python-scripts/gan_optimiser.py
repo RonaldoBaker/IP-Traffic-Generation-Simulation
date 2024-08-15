@@ -6,6 +6,7 @@ from torch.utils.data import DataLoader
 from tqdm.notebook import tqdm
 from datetime import datetime
 import pandas as pd
+import plotly.express as px
 import numpy as np
 import optuna
 import functools
@@ -231,5 +232,44 @@ class GANOptimiser:
     def report(self):
         self.__display_all_trials()
         self.__display_best_trial()
+
+    def __prepare_parallel_plot_data(self, path):
+        df = pd.read_csv(path)
+        rows_to_remove = []
+        epch = []
+        lr = []
+        bs = []
+        g_loss = []
+        d_loss = []
+        trial_numbers = []
+        for index, row in df.iterrows():
+            if row["state"] == "PRUNED":
+                rows_to_remove.append(index)
+        df = df.drop(rows_to_remove)
+
+        # Separating the optimisation data for the generator and discriminator
+        for index, row in df.iterrows():
+            epch.append(row["params_epochs"])
+            lr.append(row["params_learning_rate"])
+            bs.append(row["params_batch_size"])
+            g_loss.append(row["values_0"])
+            d_loss.append(row["values_1"])
+            trial_numbers.append(row["number"] + 1)
+
+        generator_df = pd.DataFrame({"Trial Number": trial_numbers, "Epochs": epch, "Learning Rate": lr,
+                                     "Batch Size": bs, "Generator Loss": g_loss})
+        discriminator_df = pd.DataFrame({"Trial Number": trial_numbers, "Epochs": epch, "Learning Rate": lr,
+                                         "Batch Size": bs, "Discriminator Loss": d_loss})
+        return generator_df, discriminator_df
+
+    def visualise_parallel_plot(self, path):
+        gen_df, disc_df = self.__prepare_parallel_plot_data(path)
+        gen_plot = px.parallel_coordinates(gen_df, color="Generator Loss",
+                                           color_continuous_scale=px.colors.sequential.haline, width=750)
+
+        disc_plot = px.parallel_coordinates(disc_df, color="Discriminator Loss", width=840,
+                                            color_continuous_scale=px.colors.sequential.Agsunset)
+        gen_plot.show()
+        disc_plot.show()
 
     # TODO: work out if I am going to find a way to store the times taken for halted optimisation loops
