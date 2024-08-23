@@ -9,6 +9,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 from neural_networks import Generator
+from flow_factory import FlowFactory
 
 
 # Constants
@@ -19,6 +20,7 @@ MIN_FLOWS_SENT = 1e2
 
 
 def main():
+    flow_factory = FlowFactory()
     pass
 
 
