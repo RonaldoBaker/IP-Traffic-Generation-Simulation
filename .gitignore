@@ -1,0 +1,11 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+
+# Ignore the database files from optimisation
+.db
+
+# Ignore Rider files
+.idea/
+.idea/modules
+.iml
