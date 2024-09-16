@@ -13,6 +13,7 @@ from flow_factory import FlowFactory
 
 
 # Constants
+ARCHITECTURE = ""
 GENERATOR_PATH = "../trained-generator/generator.pt"
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 RANDOM_SEED = 77
@@ -20,7 +21,7 @@ MIN_FLOWS_SENT = 1e2
 
 
 def main():
-    flow_factory = FlowFactory()
+
     pass
 
 
