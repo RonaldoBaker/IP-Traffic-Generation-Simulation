@@ -9,3 +9,6 @@
 .idea/
 .idea/modules
 .iml
+
+# Ignore pycache
+.pyc
