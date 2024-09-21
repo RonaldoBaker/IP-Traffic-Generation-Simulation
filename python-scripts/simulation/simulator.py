@@ -1,11 +1,10 @@
-import time
 import torch
 import bisect
 import operator
 import networkx as nx
 from networks import ConvergedNetwork, NonConvergedNetwork
 from flow_factory import FlowFactory
-from neural_networks import Generator
+from ..training.neural_networks import Generator
 from event import Event
 class Simulator:
     def __init__(self, generator_path, seed, device, addresses, graph, num_wavelengths):

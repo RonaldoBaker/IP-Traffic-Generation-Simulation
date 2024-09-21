@@ -7,7 +7,7 @@ from gan_trainer import GANTrainer
 NUM_EPOCHS = 5
 LEARNING_RATE = 0.02
 BATCH_SIZE = 1300
-TRAINING_DATA_PATH = "../training-data/training_data_tensor.pt"
+TRAINING_DATA_PATH = "../../training-data/training_data_tensor.pt"
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 RANDOM_SEED = 77
 # PATH = "../trained-generator/generator.pt"

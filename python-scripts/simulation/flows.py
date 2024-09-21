@@ -2,7 +2,6 @@ import torch
 import random
 from abc import ABC, abstractmethod
 
-
 class Flow:
 
     def __generate_data(self, generator, seed, device):

@@ -1,6 +1,5 @@
 import networkx as nx
 
-
 class ConvergedNetwork:
     def __init__(self, graph, num_of_wavelengths):
         self.topology = graph

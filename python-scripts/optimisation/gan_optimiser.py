@@ -10,7 +10,7 @@ import plotly.express as px
 import numpy as np
 import optuna
 import functools
-from neural_networks import Generator, Discriminator
+from ..training.neural_networks import Generator, Discriminator
 
 TRAINING_DATA_LENGTH = 3030487
 TRAINING_DATA = "training_data_tensor.pt"
